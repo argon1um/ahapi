@@ -1,4 +1,5 @@
-﻿using AHRestAPI.Models;
+﻿using AHRestAPI.Mappers;
+using AHRestAPI.Models;
 using AnimalHouseRestAPI.DataBase;
 using AnimalHouseRestAPI.Models;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +23,22 @@ namespace AHRestAPI.Controllers
             if (services != null)
             {
                 return Content(JsonConvert.SerializeObject(services, mainSettings));
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("/services/alllist/")]
+        public ActionResult<Service> AllService()
+        {
+            List<Service> services = DataBaseConnection.Context.Services.ToList();
+            if (services != null)
+            {
+                var response = ServicesMapper.ConvertToServiceDTO(services);
+                return Content(JsonConvert.SerializeObject(response, mainSettings));
             }
             else
             {

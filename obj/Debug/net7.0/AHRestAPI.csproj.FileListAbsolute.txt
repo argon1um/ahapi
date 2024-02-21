@@ -102,3 +102,4 @@ C:\Users\10a\source\repos\AnimalHouseAPI-main\obj\Debug\net7.0\refint\AHRestAPI.
 C:\Users\10a\source\repos\AnimalHouseAPI-main\obj\Debug\net7.0\AHRestAPI.pdb
 C:\Users\10a\source\repos\AnimalHouseAPI-main\obj\Debug\net7.0\AHRestAPI.genruntimeconfig.cache
 C:\Users\10a\source\repos\AnimalHouseAPI-main\obj\Debug\net7.0\ref\AHRestAPI.dll
+C:\Users\10a\source\repos\AnimalHouseAPI-main\obj\Debug\net7.0\AHRestAPI.sourcelink.json

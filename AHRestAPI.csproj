@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\largeroom.jpg" />
+    <None Remove="assets\mediumroom.jpg" />
+    <None Remove="assets\smallroom.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.11" />
@@ -20,6 +26,12 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\largeroom.jpg" />
+    <Resource Include="assets\mediumroom.jpg" />
+    <Resource Include="assets\smallroom.jpg" />
   </ItemGroup>
 
 </Project>

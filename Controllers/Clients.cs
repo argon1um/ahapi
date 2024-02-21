@@ -14,16 +14,16 @@ namespace AHRestAPI.Controllers
     {
         [HttpPost]
         [Route("/clients/log")]
-        public ActionResult<ClientRegistrationDTO> ClientAuthentification([FromBody] ClientDTO clientdto)
+        public ActionResult<ClientRegistrationDTO> ClientAuthentification([FromBody] ClientDTO client)
         {
-            Client clreg = DataBaseConnection.Context.Clients.ToList().FirstOrDefault(x => x.ClientLogin == clientdto.Login && x.ClientPassword == clientdto.Password);
+            Client clreg = DataBaseConnection.Context.Clients.ToList().FirstOrDefault(x => x.ClientLogin == client.Login && x.ClientPassword == client.Password);
             if (clreg == null)
             {
                 return BadRequest();
             }
             else
             {
-                return Mappers.ClientRegistartionMapper.ClientConverter(clreg);
+                return Ok(Mappers.ClientRegistartionMapper.ClientConverter(clreg));
             }
         }
 
