@@ -13,6 +13,7 @@ namespace AHRestAPI.Mappers
             service.ServiceCategid = serviceDTO.ServiceCategid;
             service.ServiceDescription = serviceDTO.ServiceDescription;
             service.ServiceName = serviceDTO.ServiceName;
+            service.Serviceimage = serviceDTO.Serviceimage;
             return service;
 
         }
@@ -25,6 +26,7 @@ namespace AHRestAPI.Mappers
             serviceDTO.ServiceCategid = service.ServiceCategid;
             serviceDTO.ServiceDescription = service.ServiceDescription;
             serviceDTO.ServiceName = service.ServiceName;
+            serviceDTO.Serviceimage = service.Serviceimage;
             return serviceDTO;
         }
 
@@ -41,7 +43,8 @@ namespace AHRestAPI.Mappers
                     ServicePrice = service.ServicePrice,
                     ServiceCategid = service.ServiceCategid,
                     ServiceDescription = service.ServiceDescription,
-                    ServiceName = service.ServiceName
+                    ServiceName = service.ServiceName,
+                    Serviceimage = service.Serviceimage
                 });
             }
             return servicelist;

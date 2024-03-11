@@ -11,5 +11,6 @@
         public string? ServiceDescription { get; set; }
 
         public double? ServicePrice { get; set; }
+        public string? Serviceimage { get; set; }
     }
 }

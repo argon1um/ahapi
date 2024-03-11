@@ -15,7 +15,7 @@ public partial class Service
 
     public double? ServicePrice { get; set; }
 
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public string? Serviceimage { get; set; }
 
     public virtual Servicecategory? ServiceCateg { get; set; }
 }

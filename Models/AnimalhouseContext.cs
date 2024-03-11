@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using AnimalHouseRestAPI.DataBase;
 using Microsoft.EntityFrameworkCore;
 
 namespace AHRestAPI.Models;
 
-public partial class Ah4cContext : DbContext
+public partial class AnimalhouseContext : DbContext
 {
-    public Ah4cContext()
+    public AnimalhouseContext()
     {
     }
 
-    public Ah4cContext(DbContextOptions<Ah4cContext> options)
+    public AnimalhouseContext(DbContextOptions<AnimalhouseContext> options)
         : base(options)
     {
     }
@@ -44,7 +43,7 @@ public partial class Ah4cContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseLazyLoadingProxies().UseMySql("server=localhost;user=root;password=1234;database=animalhouse", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.33-mysql"));
+        => optionsBuilder.UseLazyLoadingProxies().UseMySql("server=localhost;user=root;password=1234;database=animalhouse", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.2.0-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -135,7 +134,7 @@ public partial class Ah4cContext : DbContext
                 .HasMaxLength(45)
                 .HasColumnName("client_email");
             entity.Property(e => e.ClientImage)
-                .HasColumnType("text")
+                .HasMaxLength(45)
                 .HasColumnName("client_image");
             entity.Property(e => e.ClientLogin)
                 .HasMaxLength(45)
@@ -167,8 +166,6 @@ public partial class Ah4cContext : DbContext
 
             entity.HasIndex(e => e.RoomId, "room_id_idx");
 
-            entity.HasIndex(e => e.ServiceId, "service_id_idx");
-
             entity.HasIndex(e => e.WorkerId, "worker_id_idx");
 
             entity.Property(e => e.OrderNoteid)
@@ -181,8 +178,6 @@ public partial class Ah4cContext : DbContext
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.OrderStatusid).HasColumnName("order_statusid");
             entity.Property(e => e.RoomId).HasColumnName("room_id");
-            entity.Property(e => e.ServiceId).HasColumnName("service_id");
-            entity.Property(e => e.TotalPrice).HasColumnName("total_price");
             entity.Property(e => e.WorkerId).HasColumnName("worker_id");
 
             entity.HasOne(d => d.Animal).WithMany(p => p.Orders)
@@ -200,10 +195,6 @@ public partial class Ah4cContext : DbContext
             entity.HasOne(d => d.Room).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.RoomId)
                 .HasConstraintName("room_id");
-
-            entity.HasOne(d => d.Service).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("service_id");
 
             entity.HasOne(d => d.Worker).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.WorkerId)
@@ -238,7 +229,7 @@ public partial class Ah4cContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("room_id");
             entity.Property(e => e.RoomDescription)
-                .HasColumnType("text")
+                .HasMaxLength(200)
                 .HasColumnName("room_description");
             entity.Property(e => e.RoomImage)
                 .HasColumnType("text")
@@ -280,7 +271,7 @@ public partial class Ah4cContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("roomtype_id");
             entity.Property(e => e.RoomtypeDescription)
-                .HasColumnType("text")
+                .HasMaxLength(200)
                 .HasColumnName("roomtype_description");
             entity.Property(e => e.RoomtypeName)
                 .HasMaxLength(45)
@@ -306,6 +297,9 @@ public partial class Ah4cContext : DbContext
                 .HasMaxLength(45)
                 .HasColumnName("service_name");
             entity.Property(e => e.ServicePrice).HasColumnName("service_price");
+            entity.Property(e => e.Serviceimage)
+                .HasMaxLength(45)
+                .HasColumnName("serviceimage");
 
             entity.HasOne(d => d.ServiceCateg).WithMany(p => p.Services)
                 .HasForeignKey(d => d.ServiceCategid)
@@ -341,7 +335,7 @@ public partial class Ah4cContext : DbContext
                 .HasMaxLength(45)
                 .HasColumnName("worker_email");
             entity.Property(e => e.WorkerImage)
-                .HasColumnType("text")
+                .HasMaxLength(45)
                 .HasColumnName("worker_image");
             entity.Property(e => e.WorkerLogin)
                 .HasMaxLength(45)
