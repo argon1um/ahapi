@@ -107,7 +107,7 @@ namespace AHRestAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/orders/addneworder")]
+        [Route("/orders/addneworder/")]
         public ActionResult<OrderDTO> AddNewOrder([FromBody] OrderDTO orderdto)
         {
             if (orderdto.AdmissionDate < orderdto.IssueDate)

@@ -5,21 +5,21 @@ namespace AHRestAPI.Mappers
 {
     public class ClientRegistartionMapper
     {
-        public static Client ClientConverter(ClientRegistrationDTO clientRegistrationDTO)
+        public static Client ClientConverter(ClientResponseLogin clientRegistrationDTO)
         {
             Client client = new Client();
             client.ClientLogin = clientRegistrationDTO.ClientLogin;
-            client.ClientPhone = clientRegistrationDTO.ClientPhone;
-            client.ClientId = clientRegistrationDTO.ID;
+            client.ClientPhone = (decimal)clientRegistrationDTO.ClientPhone;
+            client.ClientId = (int)clientRegistrationDTO.ID;
             client.ClientName = clientRegistrationDTO.ClientName;
             client.ClientPassword = clientRegistrationDTO.ClientPassword;
             client.ClientEmail = clientRegistrationDTO.ClientEmail;
             return client;
         }
 
-        public static ClientRegistrationDTO ClientConverter(Client client)
+        public static ClientResponseLogin ClientConverter(Client client)
         {
-            ClientRegistrationDTO clientRegistrationDTO = new ClientRegistrationDTO();
+            ClientResponseLogin clientRegistrationDTO = new ClientResponseLogin();
             clientRegistrationDTO.ClientLogin = client.ClientLogin;
             clientRegistrationDTO.ClientPhone = client.ClientPhone;
             clientRegistrationDTO.ID = client.ClientId;

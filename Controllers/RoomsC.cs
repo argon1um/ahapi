@@ -16,6 +16,21 @@ namespace AHRestAPI.Controllers
     {
         
         [HttpGet]
+        [Route("/rooms/allfreerooms")]
+        public ActionResult<List<RoomsDTO>> GetAllFreeRooms()
+        {
+            List<Room> RoomList = DataBaseConnection.Context.Rooms.ToList().Where(x => x.RoomStatusid == 1).ToList();
+            if (RoomList == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                List<RoomsDTO> DTOList = RoomsMapper.ConvertToRoomsDTO(RoomList);
+                return DTOList;
+            }
+        }
+        [HttpGet]
         [Route("/rooms/allrooms")]
         public ActionResult<List<RoomsDTO>> GetAllRooms()
         {

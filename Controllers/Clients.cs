@@ -14,7 +14,7 @@ namespace AHRestAPI.Controllers
     {
         [HttpPost]
         [Route("/clients/log")]
-        public ActionResult<ClientRegistrationDTO> ClientAuthentification([FromBody] ClientDTO client)
+        public ActionResult<ClientResponseLogin> ClientAuthentification([FromBody] ClientDTO client)
         {
             Client clreg = DataBaseConnection.Context.Clients.ToList().FirstOrDefault(x => x.ClientLogin == client.Login && x.ClientPassword == client.Password);
             if (clreg == null)
@@ -28,8 +28,8 @@ namespace AHRestAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/clients/reg")]
-        public ActionResult<ClientRegistrationDTO> ClientRegistration([FromBody] ClientRegistrationDTO clientregdto)
+        [Route("/clients/signUp")]
+        public ActionResult<ClientResponseLogin> ClientRegistration([FromBody] ClientResponseLogin clientregdto)
         {
             if (clientregdto != null)
             {
