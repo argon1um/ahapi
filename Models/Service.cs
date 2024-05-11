@@ -15,7 +15,7 @@ public partial class Service
 
     public double? ServicePrice { get; set; }
 
-    public string? Serviceimage { get; set; }
+    public string? ServiceImage { get; set; }
 
     public virtual Servicecategory? ServiceCateg { get; set; }
 }

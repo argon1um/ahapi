@@ -5,6 +5,6 @@ namespace AnimalHouseRestAPI.DataBase
 {
     public class DataBaseConnection
     {
-        public static AnimalhouseContext Context { get; set; } = new AnimalhouseContext();
+        public static Ah4cContext Context { get; set; } = new Ah4cContext();
     }
 }

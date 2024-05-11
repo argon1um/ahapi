@@ -23,6 +23,12 @@ public partial class Order
 
     public int? OrderStatusid { get; set; }
 
+    public string? OrderReview { get; set; }
+
+    public decimal? ClientPhone { get; set; }
+
+    public int? OrderRating { get; set; }
+
     public virtual Animal? Animal { get; set; }
 
     public virtual Client? Client { get; set; }

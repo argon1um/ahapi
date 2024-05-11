@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AHRestAPI.Models;
 
-public partial class AnimalhouseContext : DbContext
+public partial class Ah4cContext : DbContext
 {
-    public AnimalhouseContext()
+    public Ah4cContext()
     {
     }
 
-    public AnimalhouseContext(DbContextOptions<AnimalhouseContext> options)
+    public Ah4cContext(DbContextOptions<Ah4cContext> options)
         : base(options)
     {
     }
@@ -43,7 +43,7 @@ public partial class AnimalhouseContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseLazyLoadingProxies().UseMySql("server=localhost;user=root;password=1234;database=animalhouse", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.2.0-mysql"));
+        => optionsBuilder.UseMySql("server=localhost;user=root;password=1234;database=ah4c", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.2.0-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -130,21 +130,16 @@ public partial class AnimalhouseContext : DbContext
             entity.Property(e => e.ClientId)
                 .ValueGeneratedNever()
                 .HasColumnName("client_id");
+            entity.Property(e => e.ClientCountoforders).HasColumnName("client_countoforders");
             entity.Property(e => e.ClientEmail)
                 .HasMaxLength(45)
                 .HasColumnName("client_email");
             entity.Property(e => e.ClientImage)
                 .HasMaxLength(45)
                 .HasColumnName("client_image");
-            entity.Property(e => e.ClientLogin)
-                .HasMaxLength(45)
-                .HasColumnName("client_login");
             entity.Property(e => e.ClientName)
                 .HasMaxLength(45)
                 .HasColumnName("client_name");
-            entity.Property(e => e.ClientPassword)
-                .HasMaxLength(45)
-                .HasColumnName("client_password");
             entity.Property(e => e.ClientPhone)
                 .HasPrecision(11)
                 .HasColumnName("client_phone");
@@ -174,8 +169,15 @@ public partial class AnimalhouseContext : DbContext
             entity.Property(e => e.AdmissionDate).HasColumnName("admission_date");
             entity.Property(e => e.AnimalId).HasColumnName("animal_id");
             entity.Property(e => e.ClientId).HasColumnName("client_id");
+            entity.Property(e => e.ClientPhone)
+                .HasPrecision(11)
+                .HasColumnName("client_phone");
             entity.Property(e => e.IssueDate).HasColumnName("issue_date");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
+            entity.Property(e => e.OrderRating).HasColumnName("order_rating");
+            entity.Property(e => e.OrderReview)
+                .HasColumnType("text")
+                .HasColumnName("order_review");
             entity.Property(e => e.OrderStatusid).HasColumnName("order_statusid");
             entity.Property(e => e.RoomId).HasColumnName("room_id");
             entity.Property(e => e.WorkerId).HasColumnName("worker_id");
@@ -293,13 +295,13 @@ public partial class AnimalhouseContext : DbContext
             entity.Property(e => e.ServiceDescription)
                 .HasMaxLength(200)
                 .HasColumnName("service_description");
+            entity.Property(e => e.ServiceImage)
+                .HasColumnType("text")
+                .HasColumnName("service_image");
             entity.Property(e => e.ServiceName)
                 .HasMaxLength(45)
                 .HasColumnName("service_name");
             entity.Property(e => e.ServicePrice).HasColumnName("service_price");
-            entity.Property(e => e.Serviceimage)
-                .HasMaxLength(45)
-                .HasColumnName("serviceimage");
 
             entity.HasOne(d => d.ServiceCateg).WithMany(p => p.Services)
                 .HasForeignKey(d => d.ServiceCategid)

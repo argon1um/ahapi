@@ -18,6 +18,9 @@ namespace AHRestAPI.Mappers
             order1.IssueDate = order.IssueDate;
             order1.AdmissionDate = order.AdmissionDate;
             order1.OrderStatusid = order.OrderStatusId;
+            order1.OrderReview = order.OrderReview;
+            order1.OrderRating = order.OrderRating;
+            order1.ClientPhone = order.ClientPhone;
             return order1;
 
         }
@@ -34,6 +37,9 @@ namespace AHRestAPI.Mappers
             order1.IssueDate = (DateOnly)order.IssueDate;
             order1.AdmissionDate = (DateOnly)order.AdmissionDate;
             order1.OrderStatusId = (int)order.OrderStatusid;
+            order1.OrderReview = order.OrderReview;
+            order1.OrderRating = order.OrderRating;
+            order1.ClientPhone = (decimal)order.ClientPhone;
             return order1;
         }
 
@@ -54,8 +60,11 @@ namespace AHRestAPI.Mappers
                     AdmissionDate = (DateOnly)order.AdmissionDate,
                     IssueDate = (DateOnly)order.IssueDate,
                     RoomId = (int)order.RoomId,
-                    WorkerId = (int)order.WorkerId
-                });
+                    WorkerId = (int)order.WorkerId,
+                    OrderReview = order.OrderReview,
+                    OrderRating = order.OrderRating,
+                    ClientPhone = (decimal)order.ClientPhone
+            });
             }
             return order1;
         }

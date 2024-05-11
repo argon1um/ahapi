@@ -9,9 +9,12 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Newtonsoft.Json;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace AHRestAPI.Controllers
 {
+    
     [Route("/orders")]
     [ApiController]
     public class Orders : ControllerBase
@@ -108,19 +111,106 @@ namespace AHRestAPI.Controllers
 
         [HttpPost]
         [Route("/orders/addneworder/")]
-        public ActionResult<OrderDTO> AddNewOrder([FromBody] OrderDTO orderdto)
+        public ActionResult<OrderDTO> AddNewOrder([FromBody] OrderDTO orderdto, decimal clientphone, string clientemail, string clientname, string animalname, string animalgen, string animalbreed, double animalweight, double animalheight, int animalold, int typeid )
         {
+            int animalbreedid = 0;
+            IActionResult AnimalCheck(int clientid)
+            {
+                List<Animal> animals = DataBaseConnection.Context.Animals.ToList().Where(x=>x.AnimalClientid == clientid).ToList();
+                if (animals != null)
+                {
+                    foreach (Animal animal in animals)
+                    {
+                        if (animal.AnimalName == animalname)
+                        {
+                            orderdto.AnimalId = animal.AnimalId;
+                            return Ok();
+                        }
+                    }
+                    return BadRequest();
+                }
+                else
+                {
+                    List<Animalbreed> breeds = DataBaseConnection.Context.Animalbreeds.ToList();
+                    foreach (Animalbreed breed in breeds)
+                    {
+                        if (animalbreed == breed.AnimalbreedName)
+                        {
+                            animalbreedid = breed.AnimalbreedId;
+                            return Ok(animalbreedid);
+                        }
+                        else
+                        {
+                            Animalbreed newbreed = new()
+                            {
+                                AnimalbreedId = DataBaseConnection.Context.Animalbreeds.Count() + 1,
+                                AnimalbreedName = breed.AnimalbreedName,
+                                AnimalTypeid = typeid,
+                            };
+                        }
+                        return Ok();
+                    }
+                    Animal animal = new(){
+                        AnimalId = DataBaseConnection.Context.Animals.Count() + 1,
+                        AnimalName = animalname,
+                        AnimalGen = animalgen,
+                        AnimalClientid = clientid,
+                        AnimalBreedid = animalbreedid,
+                        AnimalHeight = animalheight,
+                        AnimalWeight = animalweight,
+                        AnimalOld = animalold
+                        };
+                    return Ok();
+                }
+
+            }
+            Random random = new Random();
+            Client client = DataBaseConnection.Context.Clients.ToList().FirstOrDefault(x => x.ClientPhone == clientphone && x.ClientEmail == clientemail);
             if (orderdto.AdmissionDate < orderdto.IssueDate)
             {
-                return BadRequest();
+                return BadRequest("wrong dates");
             }
+            
             else
             {
-                orderdto.OrderNoteId = DataBaseConnection.Context.Orders.Max(x=>x.OrderNoteid) + 1;
-                orderdto.OrderId = DataBaseConnection.Context.Orders.Max(x=>x.OrderId) + 1;
-                DataBaseConnection.Context.Orders.Add(OrdergetMapper.ConvertToOrder(orderdto));
-                DataBaseConnection.Context.SaveChanges();
-                return Ok();
+                orderdto.OrderNoteId = DataBaseConnection.Context.Orders.Max(x => x.OrderNoteid) + 1;
+                if (client != null)
+                {
+                    orderdto.ClientId = client.ClientId;
+                    orderdto.ClientPhone = clientphone;
+                orderdto.OrderId = DataBaseConnection.Context.Orders.Max(x => x.OrderId) + 1;
+                    AnimalCheck(client.ClientId);
+                    orderdto.OrderStatusId = 1;
+                    client.ClientCountoforders += 1;
+                    DataBaseConnection.Context.Clients.Update(client);
+                    DataBaseConnection.Context.Orders.Add(OrdergetMapper.ConvertToOrder(orderdto));
+                    DataBaseConnection.Context.SaveChanges();
+                    return Ok();
+                }
+                else
+                {
+                    Client client1 = new (){  
+                        ClientId = DataBaseConnection.Context.Clients.ToList().Max(x => x.ClientId) + 1,
+                        ClientEmail = clientemail,
+                        ClientPhone = clientphone,
+                        ClientCountoforders = 1,
+                        ClientImage = null,
+                        ClientName = clientname
+                    };
+                    DataBaseConnection.Context.Clients.Add(client1);
+                    orderdto.ClientId = client1.ClientId;
+                    orderdto.ClientPhone = clientphone;
+                    AnimalCheck(client.ClientId);
+                    orderdto.OrderStatusId = 1;
+                    DataBaseConnection.Context.Orders.Add(OrdergetMapper.ConvertToOrder(orderdto));
+                    orderdto.OrderRating = null;
+                    orderdto.OrderReview = null;
+                    orderdto.WorkerId = random.Next(1, 10);
+                    DataBaseConnection.Context.SaveChanges();
+                    return Ok();
+                }
+
+                
             }
         }
     }

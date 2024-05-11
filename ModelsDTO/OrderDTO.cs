@@ -12,6 +12,9 @@ namespace AnimalHouseRestAPI.ModelsDTO
         public int AnimalId { get; set; }
         public DateOnly IssueDate { get; set; }
         public DateOnly AdmissionDate { get; set; }
+        public string? OrderReview { get; set; }
+        public decimal ClientPhone { get; set; }
+        public int? OrderRating { get; set; }
         public int OrderStatusId { get; set; }
 
 
