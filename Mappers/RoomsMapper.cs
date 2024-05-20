@@ -12,6 +12,7 @@ namespace AHRestAPI.Mappers
             room.RoomId = roomdto.RoomId;
             room.RoomNumber = roomdto.RoomNumber;
             room.RoomDescription = roomdto.RoomDescription;
+            room.RoomTypeid = roomdto.RoomTypeid;
             room.RoomImage = roomdto.RoomImage;
             room.RoomStatusid = roomdto.RoomStatusid;
             return room;
@@ -23,6 +24,7 @@ namespace AHRestAPI.Mappers
             RoomsDTO room1 = new RoomsDTO();
             room1.RoomId = room.RoomId;
             room1.RoomNumber = room.RoomNumber;
+            room1.RoomTypeid = room.RoomTypeid;
             room1.RoomDescription = room.RoomDescription;
             room1.RoomImage = room.RoomImage;
             room1.RoomStatusid = room.RoomStatusid;
@@ -40,6 +42,7 @@ namespace AHRestAPI.Mappers
                 {
                     RoomId = room.RoomId,
                     RoomNumber = room.RoomNumber,
+                    RoomTypeid = room.RoomTypeid,
                     RoomDescription = room.RoomDescription,
                     RoomImage = room.RoomImage,
                     RoomStatusid = room.RoomStatusid

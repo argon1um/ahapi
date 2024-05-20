@@ -9,8 +9,6 @@ public partial class Order
 
     public int OrderId { get; set; }
 
-    public int? ClientId { get; set; }
-
     public int? AnimalId { get; set; }
 
     public int? RoomId { get; set; }
@@ -19,23 +17,13 @@ public partial class Order
 
     public DateOnly? AdmissionDate { get; set; }
 
-    public int? WorkerId { get; set; }
-
     public int? OrderStatusid { get; set; }
-
-    public string? OrderReview { get; set; }
 
     public decimal? ClientPhone { get; set; }
 
-    public int? OrderRating { get; set; }
-
     public virtual Animal? Animal { get; set; }
-
-    public virtual Client? Client { get; set; }
 
     public virtual OrderStatus? OrderStatus { get; set; }
 
     public virtual Room? Room { get; set; }
-
-    public virtual Worker? Worker { get; set; }
 }

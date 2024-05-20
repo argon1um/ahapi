@@ -9,7 +9,9 @@ namespace AHRestAPI.Mappers
         {
             Client client = new Client();
             client.ClientPhone = (decimal)clientRegistrationDTO.ClientPhone;
+            client.ClientPassword = clientRegistrationDTO.ClientPassword;
             client.ClientId = (int)clientRegistrationDTO.ID;
+            client.ClientCountoforders = clientRegistrationDTO.ClientCountoforders;
             client.ClientName = clientRegistrationDTO.ClientName;
             client.ClientEmail = clientRegistrationDTO.ClientEmail;
             return client;
@@ -20,6 +22,8 @@ namespace AHRestAPI.Mappers
             ClientResponseLogin clientRegistrationDTO = new ClientResponseLogin();
             clientRegistrationDTO.ClientPhone = client.ClientPhone;
             clientRegistrationDTO.ID = client.ClientId;
+            clientRegistrationDTO.ClientPassword = client.ClientPassword;
+            clientRegistrationDTO.ClientCountoforders = client.ClientCountoforders;
             clientRegistrationDTO.ClientName = client.ClientName;
             clientRegistrationDTO.ClientEmail = client.ClientEmail;
             return clientRegistrationDTO;

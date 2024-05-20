@@ -15,7 +15,7 @@ namespace AHRestAPI.Controllers
         [HttpGet]
         [Route("/getAnimalTypes")]
         public ActionResult<Animaltype> GetListOfTypes()
-        {
+            {
             List<Animaltype> animaltypes = new List<Animaltype>();
             animaltypes = DataBaseConnection.Context.Animaltypes.ToList();
             return Ok(animaltypes);

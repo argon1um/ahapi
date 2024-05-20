@@ -19,9 +19,5 @@ public partial class Worker
 
     public string? WorkerEmail { get; set; }
 
-    public string? WorkerImage { get; set; }
-
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
-
     public virtual Workerpost? WorkerPost { get; set; }
 }

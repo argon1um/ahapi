@@ -9,8 +9,6 @@ public partial class Animal
 
     public string? AnimalName { get; set; }
 
-    public int? AnimalClientid { get; set; }
-
     public string? AnimalGen { get; set; }
 
     public int? AnimalBreedid { get; set; }
@@ -21,9 +19,9 @@ public partial class Animal
 
     public int? AnimalOld { get; set; }
 
-    public virtual Animalbreed? AnimalBreed { get; set; }
+    public decimal? AnimalClientphone { get; set; }
 
-    public virtual Client? AnimalClient { get; set; }
+    public virtual Animalbreed? AnimalBreed { get; set; }
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

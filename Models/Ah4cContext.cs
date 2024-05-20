@@ -43,7 +43,7 @@ public partial class Ah4cContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;user=root;password=1234;database=ah4c", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.2.0-mysql"));
+        => optionsBuilder.UseLazyLoadingProxies().UseMySql("server=localhost;user=root;password=1234;database=ah4c", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.2.0-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -59,13 +59,13 @@ public partial class Ah4cContext : DbContext
 
             entity.HasIndex(e => e.AnimalBreedid, "breedid_idx");
 
-            entity.HasIndex(e => e.AnimalClientid, "clientid_idx");
-
             entity.Property(e => e.AnimalId)
                 .ValueGeneratedNever()
                 .HasColumnName("animal_id");
             entity.Property(e => e.AnimalBreedid).HasColumnName("animal_breedid");
-            entity.Property(e => e.AnimalClientid).HasColumnName("animal_clientid");
+            entity.Property(e => e.AnimalClientphone)
+                .HasPrecision(11)
+                .HasColumnName("animal_clientphone");
             entity.Property(e => e.AnimalGen)
                 .HasMaxLength(1)
                 .IsFixedLength()
@@ -80,10 +80,6 @@ public partial class Ah4cContext : DbContext
             entity.HasOne(d => d.AnimalBreed).WithMany(p => p.Animals)
                 .HasForeignKey(d => d.AnimalBreedid)
                 .HasConstraintName("breedid");
-
-            entity.HasOne(d => d.AnimalClient).WithMany(p => p.Animals)
-                .HasForeignKey(d => d.AnimalClientid)
-                .HasConstraintName("clientid");
         });
 
         modelBuilder.Entity<Animalbreed>(entity =>
@@ -134,12 +130,12 @@ public partial class Ah4cContext : DbContext
             entity.Property(e => e.ClientEmail)
                 .HasMaxLength(45)
                 .HasColumnName("client_email");
-            entity.Property(e => e.ClientImage)
-                .HasMaxLength(45)
-                .HasColumnName("client_image");
             entity.Property(e => e.ClientName)
                 .HasMaxLength(45)
                 .HasColumnName("client_name");
+            entity.Property(e => e.ClientPassword)
+                .HasMaxLength(45)
+                .HasColumnName("client_password");
             entity.Property(e => e.ClientPhone)
                 .HasPrecision(11)
                 .HasColumnName("client_phone");
@@ -153,42 +149,28 @@ public partial class Ah4cContext : DbContext
 
             entity.HasIndex(e => e.AnimalId, "animal_id_idx");
 
-            entity.HasIndex(e => e.ClientId, "client_id_idx");
-
             entity.HasIndex(e => e.OrderNoteid, "order_noteid_UNIQUE").IsUnique();
 
             entity.HasIndex(e => e.OrderStatusid, "orderstatus_id_idx");
 
             entity.HasIndex(e => e.RoomId, "room_id_idx");
 
-            entity.HasIndex(e => e.WorkerId, "worker_id_idx");
-
             entity.Property(e => e.OrderNoteid)
                 .ValueGeneratedNever()
                 .HasColumnName("order_noteid");
             entity.Property(e => e.AdmissionDate).HasColumnName("admission_date");
             entity.Property(e => e.AnimalId).HasColumnName("animal_id");
-            entity.Property(e => e.ClientId).HasColumnName("client_id");
             entity.Property(e => e.ClientPhone)
                 .HasPrecision(11)
                 .HasColumnName("client_phone");
             entity.Property(e => e.IssueDate).HasColumnName("issue_date");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
-            entity.Property(e => e.OrderRating).HasColumnName("order_rating");
-            entity.Property(e => e.OrderReview)
-                .HasColumnType("text")
-                .HasColumnName("order_review");
             entity.Property(e => e.OrderStatusid).HasColumnName("order_statusid");
             entity.Property(e => e.RoomId).HasColumnName("room_id");
-            entity.Property(e => e.WorkerId).HasColumnName("worker_id");
 
             entity.HasOne(d => d.Animal).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.AnimalId)
                 .HasConstraintName("animal_id");
-
-            entity.HasOne(d => d.Client).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.ClientId)
-                .HasConstraintName("client_id");
 
             entity.HasOne(d => d.OrderStatus).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.OrderStatusid)
@@ -197,10 +179,6 @@ public partial class Ah4cContext : DbContext
             entity.HasOne(d => d.Room).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.RoomId)
                 .HasConstraintName("room_id");
-
-            entity.HasOne(d => d.Worker).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.WorkerId)
-                .HasConstraintName("worker_id");
         });
 
         modelBuilder.Entity<OrderStatus>(entity =>
@@ -336,9 +314,6 @@ public partial class Ah4cContext : DbContext
             entity.Property(e => e.WorkerEmail)
                 .HasMaxLength(45)
                 .HasColumnName("worker_email");
-            entity.Property(e => e.WorkerImage)
-                .HasMaxLength(45)
-                .HasColumnName("worker_image");
             entity.Property(e => e.WorkerLogin)
                 .HasMaxLength(45)
                 .HasColumnName("worker_login");

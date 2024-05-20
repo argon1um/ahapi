@@ -13,11 +13,7 @@ public partial class Client
 
     public string? ClientEmail { get; set; }
 
-    public string? ClientImage { get; set; }
-
     public int? ClientCountoforders { get; set; }
 
-    public virtual ICollection<Animal> Animals { get; set; } = new List<Animal>();
-
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public string? ClientPassword { get; set; }
 }

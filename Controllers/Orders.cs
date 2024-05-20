@@ -39,12 +39,12 @@ namespace AHRestAPI.Controllers
 
 
         [HttpGet]
-        [Route("/orders/orderslist/{clientid}")]
-        public ActionResult<List<OrderGetDTO>> GetOrdersList(int clientid)
+        [Route("/orders/orderslist/{clientphone}")]
+        public ActionResult<List<OrderGetDTO>> GetOrdersList(long clientphone)
         {
 
             List<OrderGetDTO> getDTO = new List<OrderGetDTO>();
-            List<Order> orders = DataBaseConnection.Context.Orders.ToList().Where(x => x.ClientId == clientid).ToList();
+            List<Order> orders = DataBaseConnection.Context.Orders.ToList().Where(x => x.ClientPhone == clientphone).ToList();
             if (orders != null)
             {
                 getDTO = OrdergetMapper.ConvertToGet(orders);
@@ -92,8 +92,25 @@ namespace AHRestAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("/orders/payedorders")]
+        public ActionResult<Order> OrderDeleteOnId()
+        {
+            List<OrderGetDTO> getDTO = new List<OrderGetDTO>();
+            List<Order> orders = DataBaseConnection.Context.Orders.ToList().Where(x => x.OrderStatusid == 2).ToList();
+            if (orders != null)
+            {
+                getDTO = OrdergetMapper.ConvertToGet(orders);
+                return Content(JsonConvert.SerializeObject(getDTO, mainSettings));
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpDelete]
-        [Route("/orders/orderdelete/{orderid}")]
+        [Route("/orders/orderdelete")]
         public ActionResult<Order> OrderDeleteOnId(int orderid)
         {
             List<Order> order = DataBaseConnection.Context.Orders.ToList().Where(x => x.OrderId == orderid).ToList();
@@ -111,30 +128,27 @@ namespace AHRestAPI.Controllers
 
         [HttpPost]
         [Route("/orders/addneworder/")]
-        public ActionResult<OrderDTO> AddNewOrder([FromBody] OrderDTO orderdto, decimal clientphone, string clientemail, string clientname, string animalname, string animalgen, string animalbreed, double animalweight, double animalheight, int animalold, int typeid )
+        public ActionResult<OrderDTO> AddNewOrder([FromBody] OrderAddDTO orderdto)
         {
+            OrderDTO orderDTO = new OrderDTO();
             int animalbreedid = 0;
-            IActionResult AnimalCheck(int clientid)
+            IActionResult AnimalCheck(decimal clientphone)
             {
-                List<Animal> animals = DataBaseConnection.Context.Animals.ToList().Where(x=>x.AnimalClientid == clientid).ToList();
+                List<Animal> animals = DataBaseConnection.Context.Animals.ToList().Where(x=>x.AnimalClientphone == clientphone).ToList();
                 if (animals != null)
                 {
                     foreach (Animal animal in animals)
                     {
-                        if (animal.AnimalName == animalname)
+                        if (animal.AnimalName == orderdto.animalName)
                         {
-                            orderdto.AnimalId = animal.AnimalId;
+                            orderDTO.AnimalId = animal.AnimalId;
                             return Ok();
                         }
                     }
-                    return BadRequest();
-                }
-                else
-                {
                     List<Animalbreed> breeds = DataBaseConnection.Context.Animalbreeds.ToList();
                     foreach (Animalbreed breed in breeds)
                     {
-                        if (animalbreed == breed.AnimalbreedName)
+                        if (orderdto.animalBreed == breed.AnimalbreedName)
                         {
                             animalbreedid = breed.AnimalbreedId;
                             return Ok(animalbreedid);
@@ -145,67 +159,85 @@ namespace AHRestAPI.Controllers
                             {
                                 AnimalbreedId = DataBaseConnection.Context.Animalbreeds.Count() + 1,
                                 AnimalbreedName = breed.AnimalbreedName,
-                                AnimalTypeid = typeid,
+                                AnimalTypeid = DataBaseConnection.Context.Animaltypes.ToList().FirstOrDefault(x => x.AnimaltypeName == orderdto.animalType).AnimaltypeId,
                             };
+                            DataBaseConnection.Context.Animalbreeds.Add(newbreed);
+                            DataBaseConnection.Context.SaveChanges();
+                            Animal animalnotbreed = new()
+                            {
+                                AnimalId = DataBaseConnection.Context.Animals.Count() + 1,
+                                AnimalName = orderdto.animalName,
+                                AnimalGen = orderdto.animalGen,
+                                AnimalClientphone = orderdto.clientPhone,
+                                AnimalBreedid = newbreed.AnimalbreedId,
+                                AnimalHeight = (double)orderdto.animalHeight,
+                                AnimalWeight = (double)orderdto.animalWeight,
+                                AnimalOld = orderdto.animalAge
+                            };
+                            DataBaseConnection.Context.Animals.Add(animalnotbreed);
+                            DataBaseConnection.Context.SaveChanges();
+                            return Ok();
                         }
-                        return Ok();
                     }
-                    Animal animal = new(){
+                    Animal animal1 = new()
+                    {
                         AnimalId = DataBaseConnection.Context.Animals.Count() + 1,
-                        AnimalName = animalname,
-                        AnimalGen = animalgen,
-                        AnimalClientid = clientid,
+                        AnimalName = orderdto.animalName,
+                        AnimalGen = orderdto.animalGen,
+                        AnimalClientphone = orderdto.clientPhone,
                         AnimalBreedid = animalbreedid,
-                        AnimalHeight = animalheight,
-                        AnimalWeight = animalweight,
-                        AnimalOld = animalold
-                        };
+                        AnimalHeight = (double)orderdto.animalHeight,
+                        AnimalWeight = (double)orderdto.animalWeight,
+                        AnimalOld = orderdto.animalAge
+                    };
+                    DataBaseConnection.Context.Animals.Add(animal1);
+                    DataBaseConnection.Context.SaveChanges();
                     return Ok();
                 }
+                return BadRequest();
 
             }
-            Random random = new Random();
-            Client client = DataBaseConnection.Context.Clients.ToList().FirstOrDefault(x => x.ClientPhone == clientphone && x.ClientEmail == clientemail);
-            if (orderdto.AdmissionDate < orderdto.IssueDate)
+           
+            Client client = DataBaseConnection.Context.Clients.ToList().FirstOrDefault(x => x.ClientPhone == orderdto.clientPhone);
+            if (orderdto.admDate > orderdto.issueDate)
             {
                 return BadRequest("wrong dates");
             }
             
             else
             {
-                orderdto.OrderNoteId = DataBaseConnection.Context.Orders.Max(x => x.OrderNoteid) + 1;
+                orderDTO.OrderNoteId = DataBaseConnection.Context.Orders.Max(x => x.OrderNoteid) + 1;
                 if (client != null)
                 {
-                    orderdto.ClientId = client.ClientId;
-                    orderdto.ClientPhone = clientphone;
-                orderdto.OrderId = DataBaseConnection.Context.Orders.Max(x => x.OrderId) + 1;
-                    AnimalCheck(client.ClientId);
-                    orderdto.OrderStatusId = 1;
+                    orderDTO.ClientPhone = orderdto.clientPhone;
+                    orderDTO.OrderId = DataBaseConnection.Context.Orders.Max(x => x.OrderId) + 1;
+                    AnimalCheck(client.ClientPhone);
+                    orderDTO.OrderStatusId = 1;
                     client.ClientCountoforders += 1;
+                    orderDTO.AdmissionDate = orderdto.admDate;
+                    orderDTO.IssueDate = orderdto.issueDate;
+                    orderDTO.RoomId = DataBaseConnection.Context.Rooms.ToList().FirstOrDefault(x => x.RoomNumber == orderdto.roomId).RoomId;
                     DataBaseConnection.Context.Clients.Update(client);
-                    DataBaseConnection.Context.Orders.Add(OrdergetMapper.ConvertToOrder(orderdto));
+                    DataBaseConnection.Context.Orders.Add(OrdergetMapper.ConvertToOrder(orderDTO));
                     DataBaseConnection.Context.SaveChanges();
                     return Ok();
                 }
                 else
                 {
-                    Client client1 = new (){  
+                    Client client1 = new() {
                         ClientId = DataBaseConnection.Context.Clients.ToList().Max(x => x.ClientId) + 1,
-                        ClientEmail = clientemail,
-                        ClientPhone = clientphone,
+                        ClientPhone = orderdto.clientPhone,
                         ClientCountoforders = 1,
-                        ClientImage = null,
-                        ClientName = clientname
+                        ClientName = orderdto.clientName
                     };
                     DataBaseConnection.Context.Clients.Add(client1);
-                    orderdto.ClientId = client1.ClientId;
-                    orderdto.ClientPhone = clientphone;
-                    AnimalCheck(client.ClientId);
-                    orderdto.OrderStatusId = 1;
-                    DataBaseConnection.Context.Orders.Add(OrdergetMapper.ConvertToOrder(orderdto));
-                    orderdto.OrderRating = null;
-                    orderdto.OrderReview = null;
-                    orderdto.WorkerId = random.Next(1, 10);
+                    orderDTO.ClientPhone = orderdto.clientPhone;
+                    AnimalCheck(client1.ClientPhone);
+                    orderDTO.OrderStatusId = 1;
+                    orderDTO.AdmissionDate = orderdto.admDate;
+                    orderDTO.IssueDate = orderdto.issueDate;
+                    orderDTO.RoomId = DataBaseConnection.Context.Rooms.ToList().FirstOrDefault(x=>x.RoomNumber == orderdto.roomId).RoomId;
+                    DataBaseConnection.Context.Orders.Add(OrdergetMapper.ConvertToOrder(orderDTO));
                     DataBaseConnection.Context.SaveChanges();
                     return Ok();
                 }
