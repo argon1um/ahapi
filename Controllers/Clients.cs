@@ -36,10 +36,10 @@ namespace AHRestAPI.Controllers
         {
             List<Worker> workers = DataBaseConnection.Context.Workers.ToList();
             List<Client> clients = DataBaseConnection.Context.Clients.ToList();
-            decimal phone = decimal.Parse(userAuthDTO.userPhone);
+            decimal phone = decimal.Parse(userAuthDTO.Phone);
             if (workers != null)
             {
-                Worker worker = DataBaseConnection.Context.Workers.FirstOrDefault(x => x.WorkerPhone == phone && x.WorkerPassword == userAuthDTO.userPassword);
+                Worker worker = DataBaseConnection.Context.Workers.FirstOrDefault(x => x.WorkerPhone == phone && x.WorkerPassword == userAuthDTO.Password);
                 if (worker != null)
                 {
                     return Ok(worker);
@@ -48,7 +48,7 @@ namespace AHRestAPI.Controllers
                 {
                     if (clients != null)
                     {
-                        Client client = DataBaseConnection.Context.Clients.FirstOrDefault(x => x.ClientPassword == userAuthDTO.userPassword && x.ClientPhone == phone);
+                        Client client = DataBaseConnection.Context.Clients.FirstOrDefault(x => x.ClientPassword == userAuthDTO.Password && x.ClientPhone == phone);
                         {
                             ;
                             return Ok(ClientRegistartionMapper.ClientConverter(client));

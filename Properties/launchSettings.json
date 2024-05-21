@@ -17,7 +17,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
-    },
+    }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {

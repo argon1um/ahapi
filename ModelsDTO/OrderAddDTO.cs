@@ -14,7 +14,7 @@
         public string animalName { get; set; }
         public int animalAge { get; set; }
         public decimal animalWeight { get; set; }
-        public decimal animalHeight { get; set; }
+        public decimal animalHeight { get; set;}
         public string animalGen { get; set; }
     }
 }
