@@ -139,7 +139,7 @@ namespace AHRestAPI.Controllers
                 {
                     foreach (Animal animal in animals)
                     {
-                        if (animal.AnimalName == orderdto.animalName)
+                        if (animal.AnimalName.ToLower() == orderdto.animalName.ToLower())
                         {
                             orderDTO.AnimalId = animal.AnimalId;
                             return Ok();
@@ -148,7 +148,7 @@ namespace AHRestAPI.Controllers
                     List<Animalbreed> breeds = DataBaseConnection.Context.Animalbreeds.ToList();
                     foreach (Animalbreed breed in breeds)
                     {
-                        if (orderdto.animalBreed == breed.AnimalbreedName)
+                        if (orderdto.animalBreed.ToLower() == breed.AnimalbreedName.ToLower())
                         {
                             animalbreedid = breed.AnimalbreedId;
                             return Ok(animalbreedid);
@@ -172,8 +172,10 @@ namespace AHRestAPI.Controllers
                                 AnimalBreedid = newbreed.AnimalbreedId,
                                 AnimalHeight = (double)orderdto.animalHeight,
                                 AnimalWeight = (double)orderdto.animalWeight,
-                                AnimalOld = orderdto.animalAge
+                                AnimalOld = orderdto.animalAge,
+                               
                             };
+                            orderDTO.AnimalId = animalnotbreed.AnimalId;
                             DataBaseConnection.Context.Animals.Add(animalnotbreed);
                             DataBaseConnection.Context.SaveChanges();
                             return Ok();
@@ -224,7 +226,8 @@ namespace AHRestAPI.Controllers
                 }
                 else
                 {
-                    Client client1 = new() {
+                    Client client1 = new()
+                    {
                         ClientId = DataBaseConnection.Context.Clients.ToList().Max(x => x.ClientId) + 1,
                         ClientPhone = orderdto.clientPhone,
                         ClientCountoforders = 1,
@@ -236,8 +239,13 @@ namespace AHRestAPI.Controllers
                     orderDTO.OrderStatusId = 1;
                     orderDTO.AdmissionDate = orderdto.admDate;
                     orderDTO.IssueDate = orderdto.issueDate;
-                    orderDTO.RoomId = DataBaseConnection.Context.Rooms.ToList().FirstOrDefault(x=>x.RoomNumber == orderdto.roomId).RoomId;
+                    orderDTO.AnimalId = 
+                    orderDTO.RoomId = DataBaseConnection.Context.Rooms.ToList().FirstOrDefault(x => x.RoomNumber == orderdto.roomId).RoomId;
+                    Room selroom = DataBaseConnection.Context.Rooms.FirstOrDefault(x => x.RoomId == orderDTO.RoomId);
+                    selroom.RoomStatusid = 2;
+                    
                     DataBaseConnection.Context.Orders.Add(OrdergetMapper.ConvertToOrder(orderDTO));
+                    DataBaseConnection.Context.Rooms.Update(selroom);
                     DataBaseConnection.Context.SaveChanges();
                     return Ok();
                 }
