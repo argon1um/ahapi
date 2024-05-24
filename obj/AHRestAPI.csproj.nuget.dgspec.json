@@ -1,25 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\10a\\source\\repos\\ahapi\\AHRestAPI.csproj": {}
+    "C:\\Users\\ItzArg\\source\\repos\\ahapi\\AHRestAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\10a\\source\\repos\\ahapi\\AHRestAPI.csproj": {
+    "C:\\Users\\ItzArg\\source\\repos\\ahapi\\AHRestAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\10a\\source\\repos\\ahapi\\AHRestAPI.csproj",
+        "projectUniqueName": "C:\\Users\\ItzArg\\source\\repos\\ahapi\\AHRestAPI.csproj",
         "projectName": "AHRestAPI",
-        "projectPath": "C:\\Users\\10a\\source\\repos\\ahapi\\AHRestAPI.csproj",
-        "packagesPath": "C:\\Users\\10a\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\10a\\source\\repos\\ahapi\\obj\\",
+        "projectPath": "C:\\Users\\ItzArg\\source\\repos\\ahapi\\AHRestAPI.csproj",
+        "packagesPath": "C:\\Users\\ItzArg\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ItzArg\\source\\repos\\ahapi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Offline Packages",
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\10a\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.2.config",
+          "C:\\Users\\ItzArg\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -27,10 +25,8 @@
           "net7.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
-          "C:\\Users\\10a\\Downloads\\packages": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net7.0": {

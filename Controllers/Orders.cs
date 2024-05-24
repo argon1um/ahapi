@@ -215,10 +215,13 @@ namespace AHRestAPI.Controllers
                     orderDTO.OrderId = DataBaseConnection.Context.Orders.Max(x => x.OrderId) + 1;
                     AnimalCheck(client.ClientPhone);
                     orderDTO.OrderStatusId = 1;
+                    
                     client.ClientCountoforders += 1;
                     orderDTO.AdmissionDate = orderdto.admDate;
                     orderDTO.IssueDate = orderdto.issueDate;
                     orderDTO.RoomId = DataBaseConnection.Context.Rooms.ToList().FirstOrDefault(x => x.RoomNumber == orderdto.roomId).RoomId;
+                    Room room = DataBaseConnection.Context.Rooms.FirstOrDefault(x => x.RoomId == orderDTO.RoomId);
+                    room.RoomStatusid = 2;
                     DataBaseConnection.Context.Clients.Update(client);
                     DataBaseConnection.Context.Orders.Add(OrdergetMapper.ConvertToOrder(orderDTO));
                     DataBaseConnection.Context.SaveChanges();
@@ -239,7 +242,6 @@ namespace AHRestAPI.Controllers
                     orderDTO.OrderStatusId = 1;
                     orderDTO.AdmissionDate = orderdto.admDate;
                     orderDTO.IssueDate = orderdto.issueDate;
-                    orderDTO.AnimalId = 
                     orderDTO.RoomId = DataBaseConnection.Context.Rooms.ToList().FirstOrDefault(x => x.RoomNumber == orderdto.roomId).RoomId;
                     Room selroom = DataBaseConnection.Context.Rooms.FirstOrDefault(x => x.RoomId == orderDTO.RoomId);
                     selroom.RoomStatusid = 2;
