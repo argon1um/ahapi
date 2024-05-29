@@ -4,6 +4,7 @@ using AHRestAPI.ModelsDTO;
 using AnimalHouseRestAPI.DataBase;
 using AnimalHouseRestAPI.Models;
 using AnimalHouseRestAPI.ModelsDTO;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -254,6 +255,78 @@ namespace AHRestAPI.Controllers
 
                 
             }
+        }
+        [HttpPost]
+        [Route("/orders/GenerateDoc")]
+        public IActionResult CreateDoc([FromBody] OrderAddDTO order)
+        {
+            string filepath = $"C:/Users/ItzArg/Documents/paydoc_{order.orderId}.xlsx";
+            if (!System.IO.File.Exists(filepath))
+            {
+                return NotFound("Файл не найден.");
+            }
+
+            using (var workbook = new XLWorkbook(filepath))
+            {
+                foreach (var worksheet in workbook.Worksheets)
+                {
+                    foreach (var cell in worksheet.CellsUsed())
+                    {
+                        if (cell.Value.ToString().Contains("CLIENTNAME"))
+                        {
+                            cell.Value = cell.Value.ToString().Replace("CLIENTNAME", order.clientName);
+                        }
+                        else if (cell.Value.ToString().Contains("ORDERID"))
+                        {
+                            cell.Value = cell.Value.ToString().Replace("ORDERID", order.orderId.ToString());
+                        }
+                        else if (cell.Value.ToString().Contains("CLIENTPHONE"))
+                        {
+                            cell.Value = cell.Value.ToString().Replace("CLIENTPHONE", order.clientPhone.ToString());
+                        }
+                        else if (cell.Value.ToString().Contains("ADMDATE"))
+                        {
+                            cell.Value = cell.Value.ToString().Replace("ADMDATE", order.admDate.ToString("d"));
+                        }
+                        else if (cell.Value.ToString().Contains("ISSUEDATE"))
+                        {
+                            cell.Value = cell.Value.ToString().Replace("ISSUEDATE", order.issueDate.ToString("d"));
+                        }
+                        else if (cell.Value.ToString().Contains("CLIENTMAIL"))
+                        {
+                            cell.Value = cell.Value.ToString().Replace("CLIENTMAIL", "");
+                        }
+                        else if (cell.Value.ToString().Contains("ANIMALNAME"))
+                        {
+                            cell.Value = cell.Value.ToString().Replace("ANIMALNAME", order.animalName);
+                        }
+                        else if (cell.Value.ToString().Contains("ANIMALGEN"))
+                        {
+                            cell.Value = cell.Value.ToString().Replace("ANIMALGEN", order.animalGen);
+                        }
+                        else if (cell.Value.ToString().Contains("ANIMALTYPE"))
+                        {
+                            cell.Value = cell.Value.ToString().Replace("ANIMALTYPE", order.animalType);
+                        }
+                        else if (cell.Value.ToString().Contains("ANIMALBREED"))
+                        {
+                            cell.Value = cell.Value.ToString().Replace("ANIMALBREED", order.animalBreed);
+                        }
+                        else if (cell.Value.ToString().Contains("TOTALDAYS"))
+                        {
+                            cell.Value = cell.Value.ToString().Replace("TOTALDAYS", (order.issueDate.Day - order.admDate.Day).ToString());
+                        }
+                        else if (cell.Value.ToString().Contains("TOTALPRICE"))
+                        {
+                            cell.Value = cell.Value.ToString().Replace("TOTALPRICE", order.Totalprice.ToString());
+                        }
+                    }
+                }
+                workbook.SaveAs(filepath);
+            }
+
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filepath);
+            return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ModifiedFile.xlsx");
         }
     }
 }

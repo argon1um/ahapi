@@ -21,6 +21,8 @@ public partial class Order
 
     public decimal? ClientPhone { get; set; }
 
+    public int? Totalprice { get; set; }
+
     public virtual Animal? Animal { get; set; }
 
     public virtual OrderStatus? OrderStatus { get; set; }

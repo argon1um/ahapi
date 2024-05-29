@@ -16,5 +16,6 @@
         public decimal animalWeight { get; set; }
         public decimal animalHeight { get; set;}
         public string animalGen { get; set; }
-    }
+		public int? Totalprice { get; set; }
+	}
 }

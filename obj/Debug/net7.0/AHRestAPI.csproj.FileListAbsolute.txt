@@ -247,3 +247,10 @@ C:\Users\10a\source\repos\ahapi\obj\Debug\net7.0\refint\AHRestAPI.dll
 C:\Users\10a\source\repos\ahapi\obj\Debug\net7.0\AHRestAPI.pdb
 C:\Users\10a\source\repos\ahapi\obj\Debug\net7.0\AHRestAPI.genruntimeconfig.cache
 C:\Users\10a\source\repos\ahapi\obj\Debug\net7.0\ref\AHRestAPI.dll
+C:\Users\ItzArg\source\repos\ahapi\bin\Debug\net7.0\ClosedXML.dll
+C:\Users\ItzArg\source\repos\ahapi\bin\Debug\net7.0\DocumentFormat.OpenXml.dll
+C:\Users\ItzArg\source\repos\ahapi\bin\Debug\net7.0\ExcelNumberFormat.dll
+C:\Users\ItzArg\source\repos\ahapi\bin\Debug\net7.0\Irony.dll
+C:\Users\ItzArg\source\repos\ahapi\bin\Debug\net7.0\SixLabors.Fonts.dll
+C:\Users\ItzArg\source\repos\ahapi\bin\Debug\net7.0\System.IO.Packaging.dll
+C:\Users\ItzArg\source\repos\ahapi\bin\Debug\net7.0\XLParser.dll

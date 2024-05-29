@@ -15,6 +15,6 @@ namespace AHRestAPI.ModelsDTO
         public decimal ClientPhone { get; set; }
         public int OrderStatusId { get; set; }
 
-
-    }
+		public int? Totalprice { get; set; }
+	}
 }

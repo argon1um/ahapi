@@ -167,6 +167,7 @@ public partial class Ah4cContext : DbContext
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.OrderStatusid).HasColumnName("order_statusid");
             entity.Property(e => e.RoomId).HasColumnName("room_id");
+            entity.Property(e => e.Totalprice).HasColumnName("totalprice");
 
             entity.HasOne(d => d.Animal).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.AnimalId)

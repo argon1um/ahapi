@@ -15,6 +15,7 @@ namespace AHRestAPI.Mappers
             order1.AnimalId =  order.AnimalId;
             order1.RoomId = order.RoomId;
             order1.IssueDate = order.IssueDate;
+            order1.Totalprice = order.Totalprice;
             order1.AdmissionDate = order.AdmissionDate;
             order1.OrderStatusid = order.OrderStatusId;
             order1.ClientPhone = order.ClientPhone;
@@ -29,6 +30,7 @@ namespace AHRestAPI.Mappers
             order1.OrderId = order.OrderId;
             order1.AnimalId =(int)order.AnimalId;
             order1.RoomId = (int)order.RoomId;
+            order1.Totalprice = (int)order.Totalprice;
             order1.IssueDate = (DateOnly)order.IssueDate;
             order1.AdmissionDate = (DateOnly)order.AdmissionDate;
             order1.OrderStatusId = (int)order.OrderStatusid;
@@ -52,6 +54,7 @@ namespace AHRestAPI.Mappers
                     OrderNoteId = order.OrderNoteid,
                     OrderId = order.OrderId,
                     AnimalId = (int)order.AnimalId,
+                    Totalprice = (int)order.Totalprice,
                     OrderStatusId = (int)order.OrderStatusid,
                     AdmissionDate = (DateOnly)order.AdmissionDate,
                     IssueDate = (DateOnly)order.IssueDate,
