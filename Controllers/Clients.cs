@@ -34,15 +34,24 @@ namespace AHRestAPI.Controllers
         [Route("/clients/auth/")]
         public ActionResult<ClientResponseLogin> ClientAuth([FromBody] UserAuthDTO userAuthDTO)
         {
+            string login ="";
+            decimal phone = 0;
             List<Worker> workers = DataBaseConnection.Context.Workers.ToList();
             List<Client> clients = DataBaseConnection.Context.Clients.ToList();
-            decimal phone = decimal.Parse(userAuthDTO.Phone);
+            try
+            {
+                phone = decimal.Parse(userAuthDTO.Phone);
+            }
+            catch
+            {
+                login = userAuthDTO.Phone;
+            }
             if (workers != null)
             {
-                Worker worker = DataBaseConnection.Context.Workers.FirstOrDefault(x => x.WorkerPhone == phone && x.WorkerPassword == userAuthDTO.Password);
+                Worker worker = DataBaseConnection.Context.Workers.FirstOrDefault(x => x.WorkerLogin == login  && x.WorkerPassword == userAuthDTO.Password);
                 if (worker != null)
                 {
-                    return Ok(worker);
+                    return Ok(ClientRegistartionMapper.WorkerToDTO(worker));
                 }
                 else
                 {
