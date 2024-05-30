@@ -254,3 +254,10 @@ C:\Users\ItzArg\source\repos\ahapi\bin\Debug\net7.0\Irony.dll
 C:\Users\ItzArg\source\repos\ahapi\bin\Debug\net7.0\SixLabors.Fonts.dll
 C:\Users\ItzArg\source\repos\ahapi\bin\Debug\net7.0\System.IO.Packaging.dll
 C:\Users\ItzArg\source\repos\ahapi\bin\Debug\net7.0\XLParser.dll
+C:\Users\yarik\repos\ahapi\bin\Debug\net7.0\ClosedXML.dll
+C:\Users\yarik\repos\ahapi\bin\Debug\net7.0\DocumentFormat.OpenXml.dll
+C:\Users\yarik\repos\ahapi\bin\Debug\net7.0\ExcelNumberFormat.dll
+C:\Users\yarik\repos\ahapi\bin\Debug\net7.0\Irony.dll
+C:\Users\yarik\repos\ahapi\bin\Debug\net7.0\SixLabors.Fonts.dll
+C:\Users\yarik\repos\ahapi\bin\Debug\net7.0\System.IO.Packaging.dll
+C:\Users\yarik\repos\ahapi\bin\Debug\net7.0\XLParser.dll

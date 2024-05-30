@@ -15,18 +15,18 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace AHRestAPI.Controllers
 {
-    
     [Route("/orders")]
     [ApiController]
     public class Orders : ControllerBase
     {
         JsonSerializerSettings mainSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+
         [HttpGet]
         [Route("/orders/{orderid}")]
         public ActionResult<OrderGetDTO> GetOrderOnId(int orderid)
         {
             List<OrderGetDTO> getDTO = new List<OrderGetDTO>();
-            List<Order> orders = DataBaseConnection.Context.Orders.ToList().Where(x=>x.OrderId == orderid).ToList();
+            List<Order> orders = DataBaseConnection.Context.Orders.ToList().Where(x => x.OrderId == orderid).ToList();
             if (orders != null)
             {
                 getDTO = OrdergetMapper.ConvertToGet(orders);
@@ -43,7 +43,6 @@ namespace AHRestAPI.Controllers
         [Route("/orders/orderslist/{clientphone}")]
         public ActionResult<List<OrderGetDTO>> GetOrdersList(long clientphone)
         {
-
             List<OrderGetDTO> getDTO = new List<OrderGetDTO>();
             List<Order> orders = DataBaseConnection.Context.Orders.ToList().Where(x => x.ClientPhone == clientphone).ToList();
             if (orders != null)
@@ -61,7 +60,6 @@ namespace AHRestAPI.Controllers
         [Route("/orders/orderslist/")]
         public ActionResult<List<OrderGetDTO>> GetOrdersList()
         {
-
             List<OrderGetDTO> getDTO = new List<OrderGetDTO>();
             List<Order> orders = DataBaseConnection.Context.Orders.ToList();
             if (orders != null)
@@ -78,7 +76,7 @@ namespace AHRestAPI.Controllers
 
         [HttpPut]
         [Route("/orders/statuschange/{orderid}/{statusid}")]
-        public ActionResult<Order> OrderStatusChange(int orderid, int statusid) 
+        public ActionResult<Order> OrderStatusChange(int orderid, int statusid)
         {
             Order order = DataBaseConnection.Context.Orders.ToList().FirstOrDefault(x => x.OrderId == orderid);
             if (order != null)
@@ -116,7 +114,7 @@ namespace AHRestAPI.Controllers
         {
             List<Order> order = DataBaseConnection.Context.Orders.ToList().Where(x => x.OrderId == orderid).ToList();
             if (order.Count != 0)
-            { 
+            {
                 DataBaseConnection.Context.Orders.RemoveRange(order);
                 DataBaseConnection.Context.SaveChanges();
                 return Ok();
@@ -133,9 +131,10 @@ namespace AHRestAPI.Controllers
         {
             OrderDTO orderDTO = new OrderDTO();
             int animalbreedid = 0;
+
             IActionResult AnimalCheck(decimal clientphone)
             {
-                List<Animal> animals = DataBaseConnection.Context.Animals.ToList().Where(x=>x.AnimalClientphone == clientphone).ToList();
+                List<Animal> animals = DataBaseConnection.Context.Animals.ToList().Where(x => x.AnimalClientphone == clientphone).ToList();
                 if (animals != null)
                 {
                     foreach (Animal animal in animals)
@@ -146,6 +145,7 @@ namespace AHRestAPI.Controllers
                             return Ok();
                         }
                     }
+
                     List<Animalbreed> breeds = DataBaseConnection.Context.Animalbreeds.ToList();
                     foreach (Animalbreed breed in breeds)
                     {
@@ -174,7 +174,6 @@ namespace AHRestAPI.Controllers
                                 AnimalHeight = (double)orderdto.animalHeight,
                                 AnimalWeight = (double)orderdto.animalWeight,
                                 AnimalOld = orderdto.animalAge,
-                               
                             };
                             orderDTO.AnimalId = animalnotbreed.AnimalId;
                             DataBaseConnection.Context.Animals.Add(animalnotbreed);
@@ -182,6 +181,7 @@ namespace AHRestAPI.Controllers
                             return Ok();
                         }
                     }
+
                     Animal animal1 = new()
                     {
                         AnimalId = DataBaseConnection.Context.Animals.Count() + 1,
@@ -197,16 +197,16 @@ namespace AHRestAPI.Controllers
                     DataBaseConnection.Context.SaveChanges();
                     return Ok();
                 }
-                return BadRequest();
 
+                return BadRequest();
             }
-           
+
             Client client = DataBaseConnection.Context.Clients.ToList().FirstOrDefault(x => x.ClientPhone == orderdto.clientPhone);
             if (orderdto.admDate > orderdto.issueDate)
             {
                 return BadRequest("wrong dates");
             }
-            
+
             else
             {
                 orderDTO.OrderNoteId = DataBaseConnection.Context.Orders.Max(x => x.OrderNoteid) + 1;
@@ -216,7 +216,7 @@ namespace AHRestAPI.Controllers
                     orderDTO.OrderId = DataBaseConnection.Context.Orders.Max(x => x.OrderId) + 1;
                     AnimalCheck(client.ClientPhone);
                     orderDTO.OrderStatusId = 1;
-                    
+
                     client.ClientCountoforders += 1;
                     orderDTO.AdmissionDate = orderdto.admDate;
                     orderDTO.IssueDate = orderdto.issueDate;
@@ -246,87 +246,86 @@ namespace AHRestAPI.Controllers
                     orderDTO.RoomId = DataBaseConnection.Context.Rooms.ToList().FirstOrDefault(x => x.RoomNumber == orderdto.roomId).RoomId;
                     Room selroom = DataBaseConnection.Context.Rooms.FirstOrDefault(x => x.RoomId == orderDTO.RoomId);
                     selroom.RoomStatusid = 2;
-                    
+
                     DataBaseConnection.Context.Orders.Add(OrdergetMapper.ConvertToOrder(orderDTO));
                     DataBaseConnection.Context.Rooms.Update(selroom);
                     DataBaseConnection.Context.SaveChanges();
                     return Ok();
                 }
-
-                
             }
         }
-        [HttpPost]
-        [Route("/orders/GenerateDoc")]
-        public IActionResult CreateDoc([FromBody] OrderAddDTO order)
+
+        [HttpGet("/orders/GenerateDoc")]
+        public IActionResult CreateDoc([FromQuery] int id)
         {
-            string filepath = $"C:/Users/ItzArg/Documents/paydoc_{order.orderId}.xlsx";
+            var order = DataBaseConnection.Context.Orders.FirstOrDefault(x => x.OrderId == id);
+            var client = DataBaseConnection.Context.Clients.FirstOrDefault(x => x.ClientPhone == order.ClientPhone);
+            Stream stream = new MemoryStream();
+            string filepath = "assets/paydoc.xlsx";
             if (!System.IO.File.Exists(filepath))
             {
                 return NotFound("Файл не найден.");
             }
 
-            using (var workbook = new XLWorkbook(filepath))
+            using var workbook = new XLWorkbook(filepath);
+            foreach (var worksheet in workbook.Worksheets)
             {
-                foreach (var worksheet in workbook.Worksheets)
+                foreach (var cell in worksheet.CellsUsed())
                 {
-                    foreach (var cell in worksheet.CellsUsed())
+                    if (cell.Value.ToString().Contains("CLIENTNAME"))
                     {
-                        if (cell.Value.ToString().Contains("CLIENTNAME"))
-                        {
-                            cell.Value = cell.Value.ToString().Replace("CLIENTNAME", order.clientName);
-                        }
-                        else if (cell.Value.ToString().Contains("ORDERID"))
-                        {
-                            cell.Value = cell.Value.ToString().Replace("ORDERID", order.orderId.ToString());
-                        }
-                        else if (cell.Value.ToString().Contains("CLIENTPHONE"))
-                        {
-                            cell.Value = cell.Value.ToString().Replace("CLIENTPHONE", order.clientPhone.ToString());
-                        }
-                        else if (cell.Value.ToString().Contains("ADMDATE"))
-                        {
-                            cell.Value = cell.Value.ToString().Replace("ADMDATE", order.admDate.ToString("d"));
-                        }
-                        else if (cell.Value.ToString().Contains("ISSUEDATE"))
-                        {
-                            cell.Value = cell.Value.ToString().Replace("ISSUEDATE", order.issueDate.ToString("d"));
-                        }
-                        else if (cell.Value.ToString().Contains("CLIENTMAIL"))
-                        {
-                            cell.Value = cell.Value.ToString().Replace("CLIENTMAIL", "");
-                        }
-                        else if (cell.Value.ToString().Contains("ANIMALNAME"))
-                        {
-                            cell.Value = cell.Value.ToString().Replace("ANIMALNAME", order.animalName);
-                        }
-                        else if (cell.Value.ToString().Contains("ANIMALGEN"))
-                        {
-                            cell.Value = cell.Value.ToString().Replace("ANIMALGEN", order.animalGen);
-                        }
-                        else if (cell.Value.ToString().Contains("ANIMALTYPE"))
-                        {
-                            cell.Value = cell.Value.ToString().Replace("ANIMALTYPE", order.animalType);
-                        }
-                        else if (cell.Value.ToString().Contains("ANIMALBREED"))
-                        {
-                            cell.Value = cell.Value.ToString().Replace("ANIMALBREED", order.animalBreed);
-                        }
-                        else if (cell.Value.ToString().Contains("TOTALDAYS"))
-                        {
-                            cell.Value = cell.Value.ToString().Replace("TOTALDAYS", (order.issueDate.Day - order.admDate.Day).ToString());
-                        }
-                        else if (cell.Value.ToString().Contains("TOTALPRICE"))
-                        {
-                            cell.Value = cell.Value.ToString().Replace("TOTALPRICE", order.Totalprice.ToString());
-                        }
+                        cell.Value = cell.Value.ToString().Replace("CLIENTNAME", client.ClientName);
+                    }
+                    else if (cell.Value.ToString().Contains("ORDERID"))
+                    {
+                        cell.Value = cell.Value.ToString().Replace("ORDERID", order.OrderId.ToString());
+                    }
+                    else if (cell.Value.ToString().Contains("CLIENTPHONE"))
+                    {
+                        cell.Value = cell.Value.ToString().Replace("CLIENTPHONE", client.ClientPhone.ToString());
+                    }
+                    else if (cell.Value.ToString().Contains("ADMDATE"))
+                    {
+                        cell.Value = cell.Value.ToString().Replace("ADMDATE", order.AdmissionDate.Value.ToString("d"));
+                    }
+                    else if (cell.Value.ToString().Contains("ISSUEDATE"))
+                    {
+                        cell.Value = cell.Value.ToString().Replace("ISSUEDATE", order.IssueDate.Value.ToString("d"));
+                    }
+                    else if (cell.Value.ToString().Contains("CLIENTMAIL"))
+                    {
+                        cell.Value = cell.Value.ToString().Replace("CLIENTMAIL", client.ClientEmail);
+                    }
+                    else if (cell.Value.ToString().Contains("ANIMALNAME"))
+                    {
+                        cell.Value = cell.Value.ToString().Replace("ANIMALNAME", order.Animal.AnimalName);
+                    }
+                    else if (cell.Value.ToString().Contains("ANIMALGEN"))
+                    {
+                        cell.Value = cell.Value.ToString().Replace("ANIMALGEN", order.Animal.AnimalGen);
+                    }
+                    else if (cell.Value.ToString().Contains("ANIMALTYPE"))
+                    {
+                        cell.Value = cell.Value.ToString().Replace("ANIMALTYPE", order.Animal.AnimalBreed.AnimalType.AnimaltypeName);
+                    }
+                    else if (cell.Value.ToString().Contains("ANIMALBREED"))
+                    {
+                        cell.Value = cell.Value.ToString().Replace("ANIMALBREED", order.Animal.AnimalBreed.AnimalbreedName);
+                    }
+                    else if (cell.Value.ToString().Contains("TOTALDAYS"))
+                    {
+                        cell.Value = cell.Value.ToString().Replace("TOTALDAYS", (order.IssueDate.Value.Day - order.AdmissionDate.Value.Day).ToString());
+                    }
+                    else if (cell.Value.ToString().Contains("TOTALPRICE"))
+                    {
+                        cell.Value = cell.Value.ToString().Replace("TOTALPRICE", order.Totalprice.ToString());
                     }
                 }
-                workbook.SaveAs(filepath);
             }
 
-            byte[] fileBytes = System.IO.File.ReadAllBytes(filepath);
-            return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ModifiedFile.xlsx");
+            workbook.SaveAs(stream);
+            stream.Position = 0;
+            return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
     }
 }

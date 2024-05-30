@@ -6589,24 +6589,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ItzArg\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\yarik\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ItzArg\\source\\repos\\ahapi\\AHRestAPI.csproj",
+      "projectUniqueName": "C:\\Users\\yarik\\repos\\ahapi\\AHRestAPI.csproj",
       "projectName": "AHRestAPI",
-      "projectPath": "C:\\Users\\ItzArg\\source\\repos\\ahapi\\AHRestAPI.csproj",
-      "packagesPath": "C:\\Users\\ItzArg\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ItzArg\\source\\repos\\ahapi\\obj\\",
+      "projectPath": "C:\\Users\\yarik\\repos\\ahapi\\AHRestAPI.csproj",
+      "packagesPath": "C:\\Users\\yarik\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\yarik\\repos\\ahapi\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\ItzArg\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\yarik\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -6614,6 +6609,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Users\\yarik\\source\\repos\\crud_exam\\crud_exam\\bin\\Debug\\d": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
